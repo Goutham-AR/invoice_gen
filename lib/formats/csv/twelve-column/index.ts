@@ -2,13 +2,14 @@ import fs from "node:fs";
 import path from "node:path";
 import type { FormatModule } from "../../types";
 import { meta } from "./meta";
-import { csv12Schema, type Csv12Invoice } from "./schema";
+import { csv12Schema, csv12InvoiceSchema, type Csv12Invoice } from "./schema";
 import { fields } from "./fields";
 import { renderCsv12 } from "./render";
 
 export const csv12Module: FormatModule<Csv12Invoice> = {
   ...meta,
   schema: csv12Schema,
+  itemSchema: csv12InvoiceSchema,
   fields,
   render: renderCsv12,
   promptGuidance: fs.readFileSync(

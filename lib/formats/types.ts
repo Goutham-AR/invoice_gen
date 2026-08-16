@@ -33,6 +33,8 @@ export type FormatMeta = {
 export type ClientFormatModule<TInvoice = unknown> = FormatMeta & {
   /** Validates the LLM's structured output: an array of invoices for this variant. */
   schema: z.ZodType<TInvoice[]>;
+  /** Validates a single invoice; used for per-record streaming validation and the schema-driven editor. */
+  itemSchema: z.ZodType<TInvoice>;
   /** Single source of truth for the LLM schema doc, docs table, and edit form. */
   fields: FieldMeta[];
   /** Deterministic: structured data in, exact target file text out. */

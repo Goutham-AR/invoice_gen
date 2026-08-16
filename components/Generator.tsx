@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { groupedClientRegistry, getClientModule } from "@/lib/formats/clientRegistry";
+import { consumeNdjson } from "@/lib/streamClient";
 import AppSidebar from "@/components/sidebar/AppSidebar";
 import FormatTree, { type TreeModule } from "@/components/sidebar/FormatTree";
+import RecordEditor from "@/components/editor/RecordEditor";
 
-type GenerateResponse = { records: unknown[]; renderedText: string; variantId: string };
 type ErrorResponse = { error: string };
 
 const groups = groupedClientRegistry();
@@ -18,93 +19,90 @@ export default function Generator() {
   const [prompt, setPrompt] = useState("");
   const [records, setRecords] = useState<unknown[] | null>(null);
   const [renderedText, setRenderedText] = useState("");
-  const [editorText, setEditorText] = useState("");
   const [fixupInstruction, setFixupInstruction] = useState("");
   const [loading, setLoading] = useState(false);
   const [fixupLoading, setFixupLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [editorError, setEditorError] = useState<string | null>(null);
   const [copyLabel, setCopyLabel] = useState("Copy");
+
+  const abortRef = useRef<AbortController | null>(null);
 
   const currentGroup = groups.find((g) => g.formatType === formatType) ?? groups[0];
   const currentVariant = currentGroup.modules.find((m) => m.id === variantId) ?? currentGroup.modules[0];
   const currentModule = useMemo(() => getClientModule(formatType, variantId), [formatType, variantId]);
+
+  const busy = loading || fixupLoading;
 
   function handleSelectVariant(m: TreeModule) {
     setFormatType(m.formatType);
     setVariantId(m.id);
   }
 
-  function applyResult(data: GenerateResponse) {
-    setRecords(data.records);
-    setRenderedText(data.renderedText);
-    setEditorText(JSON.stringify(data.records, null, 2));
-    setEditorError(null);
+  function handleCancel() {
+    abortRef.current?.abort();
+  }
+
+  async function runStream(
+    url: string,
+    body: unknown,
+    setBusy: (v: boolean) => void
+  ): Promise<void> {
+    setBusy(true);
+    setError(null);
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+        signal: controller.signal,
+      });
+
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({ error: "Request failed." }))) as ErrorResponse;
+        setError(data.error ?? "Request failed.");
+        return;
+      }
+
+      await consumeNdjson(res, (line) => {
+        if (line.type === "record" || line.type === "done") {
+          setRecords(line.records);
+          setRenderedText(line.renderedText);
+        } else if (line.type === "error") {
+          setError(line.message);
+        }
+      });
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        // Cancelled by the user — not an error.
+      } else {
+        setError(err instanceof Error ? err.message : "Request failed.");
+      }
+    } finally {
+      setBusy(false);
+      abortRef.current = null;
+    }
   }
 
   async function handleGenerate() {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, formatType, variantId }),
-      });
-      const data = (await res.json()) as GenerateResponse | ErrorResponse;
-      if (!res.ok || "error" in data) {
-        setError("error" in data ? data.error : "Generation failed.");
-        return;
-      }
-      applyResult(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Generation failed.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  function handleApplyEdit() {
-    if (!currentModule) return;
-    setEditorError(null);
-    let parsed: unknown;
-    try {
-      parsed = JSON.parse(editorText);
-    } catch {
-      setEditorError("Not valid JSON.");
-      return;
-    }
-    const result = currentModule.schema.safeParse(parsed);
-    if (!result.success) {
-      setEditorError(result.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("\n"));
-      return;
-    }
-    setRecords(result.data);
-    setRenderedText(currentModule.render(result.data));
+    setRecords(null);
+    setRenderedText("");
+    await runStream("/api/generate", { prompt, formatType, variantId }, setLoading);
   }
 
   async function handleFixup() {
     if (!records || !fixupInstruction.trim()) return;
-    setFixupLoading(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/edit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ formatType, variantId, records, instruction: fixupInstruction }),
-      });
-      const data = (await res.json()) as GenerateResponse | ErrorResponse;
-      if (!res.ok || "error" in data) {
-        setError("error" in data ? data.error : "Edit failed.");
-        return;
-      }
-      applyResult(data);
-      setFixupInstruction("");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Edit failed.");
-    } finally {
-      setFixupLoading(false);
-    }
+    const instruction = fixupInstruction;
+    await runStream("/api/edit", { formatType, variantId, records, instruction }, setFixupLoading);
+    setFixupInstruction((current) => (current === instruction ? "" : current));
+  }
+
+  function handleRecordsChange(next: unknown[]) {
+    if (!currentModule) return;
+    setRecords(next);
+    setRenderedText(currentModule.render(next));
   }
 
   function handleDownload() {
@@ -160,13 +158,23 @@ export default function Generator() {
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
             />
-            <button
-              onClick={handleGenerate}
-              disabled={loading}
-              className="px-4 py-2 rounded-md bg-ledger text-white text-sm font-medium disabled:opacity-50 hover:bg-ledger/90 transition-colors"
-            >
-              {loading ? "Generating…" : "Generate"}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleGenerate}
+                disabled={busy}
+                className="px-4 py-2 rounded-md bg-ledger text-white text-sm font-medium disabled:opacity-50 hover:bg-ledger/90 transition-colors"
+              >
+                {loading ? "Generating…" : "Generate"}
+              </button>
+              {busy && (
+                <button
+                  onClick={handleCancel}
+                  className="px-4 py-2 rounded-md border border-hairline text-sm text-ink-muted hover:text-ink hover:border-ink/30 transition-colors"
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
           </section>
 
           {error && (
@@ -184,6 +192,9 @@ export default function Generator() {
                     <span className="font-mono text-[10px] px-1.5 py-0.5 rounded border border-stamp/40 text-stamp bg-stamp-tint">
                       {currentModule?.fileExtension}
                     </span>
+                    {loading && (
+                      <span className="text-[10px] text-ink-muted animate-pulse">streaming…</span>
+                    )}
                   </div>
                   <div className="flex gap-2">
                     <button
@@ -216,30 +227,32 @@ export default function Generator() {
                   />
                   <button
                     onClick={handleFixup}
-                    disabled={fixupLoading}
+                    disabled={busy}
                     className="px-4 py-2 rounded-md border border-hairline text-sm text-ink hover:border-ledger hover:text-ledger disabled:opacity-50 transition-colors"
                   >
                     {fixupLoading ? "Applying…" : "Apply"}
                   </button>
+                  {fixupLoading && (
+                    <button
+                      onClick={handleCancel}
+                      className="px-4 py-2 rounded-md border border-hairline text-sm text-ink-muted hover:text-ink hover:border-ink/30 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  )}
                 </div>
               </section>
 
-              <section className="rounded-xl border border-hairline bg-surface p-5 space-y-2">
+              <section className="rounded-xl border border-hairline bg-surface p-5 space-y-3">
                 <h2 className="text-sm font-medium text-ink">Edit structured data</h2>
-                <textarea
-                  className="w-full rounded-lg border border-hairline bg-paper px-3.5 py-3 h-56 font-mono text-xs focus:outline-none focus:ring-2 focus:ring-ledger/40 focus:border-ledger"
-                  value={editorText}
-                  onChange={(e) => setEditorText(e.target.value)}
-                />
-                {editorError && (
-                  <p className="text-xs text-danger whitespace-pre-wrap">{editorError}</p>
+                {currentModule && (
+                  <RecordEditor
+                    records={records}
+                    itemSchema={currentModule.itemSchema}
+                    fields={currentModule.fields}
+                    onChange={handleRecordsChange}
+                  />
                 )}
-                <button
-                  onClick={handleApplyEdit}
-                  className="text-xs border border-hairline rounded-md px-3 py-1.5 text-ink-muted hover:text-ink hover:border-ink/30 transition-colors"
-                >
-                  Re-render
-                </button>
               </section>
             </>
           )}

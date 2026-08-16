@@ -18,11 +18,11 @@ const STAMPS: Record<string, string> = {
   twenty_two_column: "22 col",
   twenty_four_column: "24 col",
   edi_810: "810",
-  encompass_edi_810: "810",
-  us_foods: "810",
-  zero_sac: "810",
-  quickbooks_inbound: "AR ledger",
-  quickbooks_online_adjustments: "AR ledger",
+  zero_sac: "0SAC",
+  encompass_edi_810: "enc",
+  us_foods: "USF",
+  quickbooks_inbound: "QBI",
+  quickbooks_online_adjustments: "QBO",
 };
 
 const GROUP_LABELS: Record<string, string> = {

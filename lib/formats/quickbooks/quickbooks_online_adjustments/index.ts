@@ -2,13 +2,14 @@ import fs from "node:fs";
 import path from "node:path";
 import type { FormatModule } from "../../types";
 import { meta } from "./meta";
-import { qbOnlineSchema, type QbOnlineInvoice } from "./schema";
+import { qbOnlineSchema, qbOnlineInvoiceSchema, type QbOnlineInvoice } from "./schema";
 import { fields } from "./fields";
 import { renderQbOnline } from "./render";
 
 export const qbOnlineModule: FormatModule<QbOnlineInvoice> = {
   ...meta,
   schema: qbOnlineSchema,
+  itemSchema: qbOnlineInvoiceSchema,
   fields,
   render: renderQbOnline,
   promptGuidance: fs.readFileSync(
