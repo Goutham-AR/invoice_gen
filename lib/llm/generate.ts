@@ -22,9 +22,14 @@ async function callLlm(messages: ChatMessage[]): Promise<string> {
   return content;
 }
 
+/** Reasoning models (e.g. served via sglang) can prepend a <think> block even in json_object mode. */
+function stripThinkBlock(raw: string): string {
+  return raw.replace(/^\s*<think>[\s\S]*?<\/think>\s*/i, "");
+}
+
 /** Models in json_object mode typically wrap the array under a key; unwrap defensively. */
 function extractArray(raw: string): unknown {
-  const parsed = JSON.parse(raw);
+  const parsed = JSON.parse(stripThinkBlock(raw));
   if (Array.isArray(parsed)) return parsed;
   if (parsed && typeof parsed === "object") {
     const arrayValue = Object.values(parsed as Record<string, unknown>).find((v) =>
