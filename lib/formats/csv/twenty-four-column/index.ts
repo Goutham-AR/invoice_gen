@@ -19,4 +19,8 @@ export const csv24Module: FormatModule<Csv24Invoice> = {
     path.join(process.cwd(), "lib/formats/csv/twenty-four-column/sample.csv"),
     "utf-8"
   ),
+  guide: fs.readFileSync(
+    path.join(process.cwd(), "lib/formats/csv/twenty-four-column/guide.md"),
+    "utf-8"
+  ),
 };

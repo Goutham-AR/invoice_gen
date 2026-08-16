@@ -41,10 +41,16 @@ export type ClientFormatModule<TInvoice = unknown> = FormatMeta & {
 
 /** Full module, only ever imported server-side (API routes, docs pages) since it reads files. */
 export type FormatModule<TInvoice = unknown> = ClientFormatModule<TInvoice> & {
-  /** Business rules injected into the LLM system prompt (the variant's rules.md). */
+  /** Business rules injected into the LLM system prompt (the variant's rules.md, verbatim/unedited). */
   promptGuidance: string;
   /** Reference sample file content, shown on the docs page. */
   sample: string;
+  /**
+   * Authored, in-depth documentation for human readers (docs page). Distinct from
+   * `promptGuidance`: this is a better-organized rewrite for people, while
+   * `promptGuidance` stays the literal source text fed to the LLM.
+   */
+  guide: string;
 };
 
 // ---- Shared Zod fragments, reused by variant schemas without forcing one universal schema ----

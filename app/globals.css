@@ -1,27 +1,87 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/*
+  Ledger palette — grounded in the subject (invoices, ledgers, postal/stamp marks)
+  rather than generic SaaS blue. "ledger" (teal) is the working accent; "stamp"
+  (amber) is reserved for the one signature detail: structural fact pills on each
+  format variant (column/segment counts), never for chrome.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #fafaf9;
+  --surface: #ffffff;
+  --ink: #1c2321;
+  --ink-muted: #5b655f;
+  --hairline: #e3e1d9;
+  --ledger: #0e6b58;
+  --ledger-tint: #e6f2ee;
+  --stamp: #b9762f;
+  --stamp-tint: #faf1e6;
+  --danger: #b3261e;
+  --danger-tint: #fbeae9;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-hairline: var(--hairline);
+  --color-ledger: var(--ledger);
+  --color-ledger-tint: var(--ledger-tint);
+  --color-stamp: var(--stamp);
+  --color-stamp-tint: var(--stamp-tint);
+  --color-danger: var(--danger);
+  --color-danger-tint: var(--danger-tint);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-newsreader);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --paper: #141816;
+    --surface: #1a1f1c;
+    --ink: #ece9e2;
+    --ink-muted: #9aa39d;
+    --hairline: #2b322e;
+    --ledger: #4fb59b;
+    --ledger-tint: #16302a;
+    --stamp: #d99a55;
+    --stamp-tint: #2c2418;
+    --danger: #e2857c;
+    --danger-tint: #3a1f1d;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: var(--ledger-tint);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ledger);
+  outline-offset: 2px;
+}
+
+.prose {
+  --tw-prose-body: var(--ink-muted);
+  --tw-prose-headings: var(--ink);
+  --tw-prose-links: var(--ledger);
+  --tw-prose-bold: var(--ink);
+  --tw-prose-counters: var(--ink-muted);
+  --tw-prose-bullets: var(--hairline);
+  --tw-prose-hr: var(--hairline);
+  --tw-prose-quotes: var(--ink);
+  --tw-prose-quote-borders: var(--hairline);
+  --tw-prose-captions: var(--ink-muted);
+  --tw-prose-code: var(--ink);
+  --tw-prose-th-borders: var(--hairline);
+  --tw-prose-td-borders: var(--hairline);
 }

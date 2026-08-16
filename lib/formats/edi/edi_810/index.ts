@@ -13,4 +13,5 @@ export const edi810Module: FormatModule<Edi810Invoice> = {
   render: renderEdi810,
   promptGuidance: fs.readFileSync(path.join(process.cwd(), "lib/formats/edi/edi_810/rules.md"), "utf-8"),
   sample: fs.readFileSync(path.join(process.cwd(), "lib/formats/edi/edi_810/sample.txt"), "utf-8"),
+  guide: fs.readFileSync(path.join(process.cwd(), "lib/formats/edi/edi_810/guide.md"), "utf-8"),
 };

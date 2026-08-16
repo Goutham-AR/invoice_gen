@@ -16,4 +16,5 @@ export const csv12Module: FormatModule<Csv12Invoice> = {
     "utf-8"
   ),
   sample: fs.readFileSync(path.join(process.cwd(), "lib/formats/csv/twelve-column/sample.csv"), "utf-8"),
+  guide: fs.readFileSync(path.join(process.cwd(), "lib/formats/csv/twelve-column/guide.md"), "utf-8"),
 };

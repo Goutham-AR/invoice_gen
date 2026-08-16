@@ -19,4 +19,8 @@ export const qbOnlineModule: FormatModule<QbOnlineInvoice> = {
     path.join(process.cwd(), "lib/formats/quickbooks/quickbooks_online_adjustments/sample.txt"),
     "utf-8"
   ),
+  guide: fs.readFileSync(
+    path.join(process.cwd(), "lib/formats/quickbooks/quickbooks_online_adjustments/guide.md"),
+    "utf-8"
+  ),
 };

@@ -13,4 +13,5 @@ export const zeroSacModule: FormatModule<ZeroSacInvoice> = {
   render: renderZeroSac,
   promptGuidance: fs.readFileSync(path.join(process.cwd(), "lib/formats/edi/zero_sac/rules.md"), "utf-8"),
   sample: fs.readFileSync(path.join(process.cwd(), "lib/formats/edi/zero_sac/sample.txt"), "utf-8"),
+  guide: fs.readFileSync(path.join(process.cwd(), "lib/formats/edi/zero_sac/guide.md"), "utf-8"),
 };

@@ -13,4 +13,5 @@ export const usFoodsModule: FormatModule<UsFoodsInvoice> = {
   render: renderUsFoods,
   promptGuidance: fs.readFileSync(path.join(process.cwd(), "lib/formats/edi/us_foods/rules.md"), "utf-8"),
   sample: fs.readFileSync(path.join(process.cwd(), "lib/formats/edi/us_foods/sample.txt"), "utf-8"),
+  guide: fs.readFileSync(path.join(process.cwd(), "lib/formats/edi/us_foods/guide.md"), "utf-8"),
 };

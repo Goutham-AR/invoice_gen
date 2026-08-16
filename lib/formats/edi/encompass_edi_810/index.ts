@@ -19,4 +19,8 @@ export const encompassModule: FormatModule<EncompassInvoice> = {
     path.join(process.cwd(), "lib/formats/edi/encompass_edi_810/sample.txt"),
     "utf-8"
   ),
+  guide: fs.readFileSync(
+    path.join(process.cwd(), "lib/formats/edi/encompass_edi_810/guide.md"),
+    "utf-8"
+  ),
 };

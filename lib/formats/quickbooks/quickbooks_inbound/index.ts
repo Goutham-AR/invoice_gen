@@ -19,4 +19,8 @@ export const qbInboundModule: FormatModule<QbInboundInvoice> = {
     path.join(process.cwd(), "lib/formats/quickbooks/quickbooks_inbound/sample.txt"),
     "utf-8"
   ),
+  guide: fs.readFileSync(
+    path.join(process.cwd(), "lib/formats/quickbooks/quickbooks_inbound/guide.md"),
+    "utf-8"
+  ),
 };
