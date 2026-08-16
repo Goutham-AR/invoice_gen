@@ -1,0 +1,16 @@
+Trans #	Type	Date	Num	Source Name	Item	Item Description	Qty	Sales Price	Due Date
+111111	Invoice	06/10/2025	SP-QBI-56	mandi15					08/30/2025
+					QB-vdk3	vdk-desc1	-1	170.50
+					QB-vdk3	vdk-desc1	-1	170.50
+					QB-vdk3	vdk-desc1	1	170.50
+
+	
+111111	Invoice	06/10/2025	SP-QBI-57	mandi15					07/30/2025
+					QB-whiskey2	whiskey-desc	1	65
+					QB-whiskey2	whiskey-desc	-1	65
+					QB-whiskey2	whiskey-desc	-1	105
+					QB-whiskey3	whiskey-desc	-2	65.45
+
+
+111111	Credit Memo	06/10/2025	SP-QBI-58	mandi15					07/30/2025
+					CAVA BRUT	description	12	7.33

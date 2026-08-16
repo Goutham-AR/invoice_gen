@@ -1,0 +1,15 @@
+Transaction Type	Date	Num	Name	Memo/Description	Qty	Rate	Due Date
+Invoice	10/17/2025	INV_1710_Q1	1234567				11/22/2025
+				QProd-0001	-1.45	75
+				QProd-0002	1.56476	75
+				QProd-0003	-2.5463	75.50
+
+
+Invoice	10/17/2025	INV_1710_Q2	1234567				11/30/2025
+				Old Fashioned:Sons & Dotters Old Fashioned - 375 ml	-48.345	15.00
+				Old Fashioned:Sons & Dotters Old Fashioned - 750 ml	-12.234	30.00
+
+
+Credit Memo	10/17/2025	INV_1710_Q3	1234567			
+				CAVA BRUT	12.566	7.33
+				CAVA BRUT2	-10.346	6.243

@@ -1,0 +1,28 @@
+import type { FieldMeta } from "../../types";
+
+export const fields: FieldMeta[] = [
+  { key: "invoiceDate", label: "BIG01 Invoice Date", dataType: "Date (YYYYMMDD)", mandatory: true, scope: "header", example: "20221221" },
+  { key: "invoiceNumber", label: "BIG02 Invoice Number", dataType: "AlphaNumeric (1/18)", mandatory: true, scope: "header", example: "902240278" },
+  { key: "poDate", label: "BIG03 PO Date", dataType: "Date (YYYYMMDD)", mandatory: false, scope: "header" },
+  { key: "poNumber", label: "BIG04 PO Number", dataType: "AlphaNumeric", mandatory: false, scope: "header" },
+  { key: "refInvoiceNumber", label: "BIG10 Reference Invoice Number", dataType: "AlphaNumeric (1/8)", mandatory: false, scope: "header" },
+  { key: "shipTo.name", label: "N1(ST)02 Location/Name", dataType: "AlphaNumeric (1/60)", mandatory: true, scope: "header" },
+  { key: "shipTo.vendorStoreId", label: "N1(ST)04 Customer Number", dataType: "AlphaNumeric (1/80)", mandatory: true, scope: "header" },
+  { key: "shipTo.address1", label: "N301 Address 1", dataType: "AlphaNumeric (1/40)", mandatory: false, scope: "header" },
+  { key: "shipTo.address2", label: "N302 Address 2", dataType: "AlphaNumeric (1/40)", mandatory: false, scope: "header" },
+  { key: "shipTo.city", label: "N401 City", dataType: "AlphaNumeric (1/40)", mandatory: false, scope: "header" },
+  { key: "shipTo.state", label: "N402 State", dataType: "Identifier (2/2)", mandatory: false, scope: "header" },
+  { key: "shipTo.zip", label: "N403 Zip Code", dataType: "AlphaNumeric (5/5)", mandatory: false, scope: "header" },
+  { key: "dueDate", label: "ITD06 Due Date", dataType: "Date (YYYYMMDD)", mandatory: false, scope: "header" },
+  { key: "lineItems[].quantity", label: "IT102 Quantity", dataType: "Numeric (1/10)", mandatory: true, scope: "lineItem", notes: "Negative = standard credit/return indicator" },
+  { key: "lineItems[].uom", label: "IT103 Unit of Measure", dataType: "EA, BO, CA, KE, DS", mandatory: true, scope: "lineItem" },
+  { key: "lineItems[].unitPrice", label: "IT104 Unit Price", dataType: "Numeric (1/11)", mandatory: true, scope: "lineItem", notes: "Negative = nonstandard credit/return indicator" },
+  { key: "lineItems[].upcPack", label: "IT107 Pack UPC", dataType: "Identifier (1/14)", mandatory: false, scope: "lineItem" },
+  { key: "lineItems[].upcCase", label: "IT109 Case UPC", dataType: "Identifier (1/14)", mandatory: false, scope: "lineItem" },
+  { key: "lineItems[].itemNumber", label: "IT111 Item Number", dataType: "AlphaNumeric (1/48)", mandatory: true, scope: "lineItem", notes: "Distributor SKU" },
+  { key: "lineItems[].description", label: "PID05 Description", dataType: "AlphaNumeric (1/80)", mandatory: true, scope: "lineItem" },
+  { key: "lineItems[].packsPerCase", label: "PO401 Packs Per Case", dataType: "Numeric, implied decimal", mandatory: false, scope: "lineItem" },
+  { key: "lineItems[].charges[].indicator", label: "SAC01 Allowance/Charge Code", dataType: "A or C", mandatory: false, scope: "charge" },
+  { key: "lineItems[].charges[].code", label: "SAC02 SAC Code", dataType: "Identifier (4/4)", mandatory: false, scope: "charge", example: "C110" },
+  { key: "lineItems[].charges[].amount", label: "SAC05 Total", dataType: "Numeric, implied decimal", mandatory: false, scope: "charge" },
+];

@@ -1,0 +1,26 @@
+import type { FieldMeta } from "../../types";
+
+export const fields: FieldMeta[] = [
+  { key: "divisionId", label: "Division_id", dataType: "Numeric", mandatory: true, scope: "header", example: "1000" },
+  { key: "invoiceNumber", label: "Invoice_number", dataType: "Alphanumeric (22 max)", mandatory: true, scope: "header", example: "212121AN" },
+  { key: "invoiceDate", label: "Invoice_date", dataType: "M/DD/YYYY", mandatory: true, scope: "header", example: "03/15/2005" },
+  { key: "vendorStoreId", label: "Vendor_store_id", dataType: "Alphanumeric (80 max)", mandatory: true, scope: "header", example: "BCD111" },
+  { key: "invoiceDueDate", label: "Invoice_due_date", dataType: "M/DD/YYYY", mandatory: false, scope: "header", notes: "Pulled from invoice_date if omitted" },
+  { key: "poNumber", label: "Po_number", dataType: "Alphanumeric (22 max)", mandatory: false, scope: "header" },
+  { key: "poDate", label: "po_date", dataType: "M/DD/YYYY", mandatory: false, scope: "header" },
+  { key: "refInvoiceNumber", label: "ref_invoice_number", dataType: "Alphanumeric (22 max)", mandatory: false, scope: "header" },
+  { key: "lineItems[].quantityShipped", label: "quantity_shipped", dataType: "Numeric, up to 2 decimals", mandatory: true, scope: "lineItem", notes: "Negative = credit/return" },
+  { key: "lineItems[].uom", label: "Quantity_uom", dataType: "BO, EA, CA, KE, DS", mandatory: true, scope: "lineItem" },
+  { key: "lineItems[].itemNumber", label: "Item_number", dataType: "Alphanumeric (20 max)", mandatory: true, scope: "lineItem" },
+  { key: "lineItems[].upcPack", label: "upc_pack", dataType: "Alphanumeric (12 digit preferred)", mandatory: false, scope: "lineItem" },
+  { key: "lineItems[].upcCase", label: "upc_case", dataType: "Alphanumeric (12 digit preferred)", mandatory: false, scope: "lineItem" },
+  { key: "lineItems[].gtinId", label: "gtin_id", dataType: "Alphanumeric (14 digit)", mandatory: false, scope: "lineItem" },
+  { key: "lineItems[].description", label: "product_description", dataType: "Alphanumeric (80 max)", mandatory: true, scope: "lineItem" },
+  { key: "lineItems[].unitPrice", label: "unit_price", dataType: "Numeric, up to 4 decimals", mandatory: true, scope: "lineItem", notes: "Negative = nonstandard credit/return indicator" },
+  { key: "lineItems[].promotionalDiscount", label: "promotional_discount", dataType: "Numeric, up to 4 decimals", mandatory: false, scope: "charge", notes: "SAC F810" },
+  { key: "lineItems[].stateTax", label: "State_tax", dataType: "Numeric, up to 4 decimals", mandatory: false, scope: "charge", notes: "SAC H850" },
+  { key: "lineItems[].depositAmount", label: "deposit_amount", dataType: "Numeric, up to 4 decimals", mandatory: false, scope: "charge", notes: "SAC C110" },
+  { key: "lineItems[].miscellaneousCharge", label: "miscellaneous_charge", dataType: "Numeric, up to 4 decimals", mandatory: false, scope: "charge", notes: "SAC I131" },
+  { key: "lineItems[].extendedPrice", label: "extended_price", dataType: "Numeric, up to 4 decimals", mandatory: false, scope: "lineItem", notes: "Calculated (qty * unit price) if omitted" },
+  { key: "lineItems[].packsPerCase", label: "packs_per_case", dataType: "Numeric, up to 4 decimals", mandatory: false, scope: "lineItem" },
+];
