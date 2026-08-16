@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local single-user data (rules store) — will move to a DB later
+/data/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

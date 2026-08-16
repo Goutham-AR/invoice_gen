@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { FormatModule } from "../formats/types";
 import { getLlmClient, getLlmModel } from "./client";
+import { getEnabledRuleTexts } from "../rules/store";
 
 const MAX_REPAIR_ATTEMPTS = 2;
 
@@ -144,6 +145,15 @@ function currentDateLine(): string {
   return `Today's date is ${iso} (${weekday}). Use this as the reference point for any relative date the request implies (e.g. "due in 30 days", "last month's invoice", "dated yesterday") — do not default to a date from your training data.`;
 }
 
+function userRulesSection(): string | null {
+  const rules = getEnabledRuleTexts();
+  if (rules.length === 0) return null;
+  return [
+    "Additional user-defined rules for this deployment (apply these on top of, and take precedence over, the format's own defaults where they conflict):",
+    ...rules.map((r) => `- ${r}`),
+  ].join("\n");
+}
+
 function buildSystemPrompt<T>(module: FormatModule<T>): string {
   const jsonSchema = z.toJSONSchema(module.schema as unknown as z.ZodType);
 
@@ -154,6 +164,7 @@ function buildSystemPrompt<T>(module: FormatModule<T>): string {
     JSON.stringify(jsonSchema),
     `Format-specific business rules you must honor when deciding field values:`,
     module.promptGuidance,
+    userRulesSection(),
     [
       "Rules:",
       "- Populate mandatory fields only, by default. Do NOT add an optional field unless the request gives a concrete, specific reason to set it (e.g. \"with a promotional discount\" is a reason to set that one optional field; a generic request for invoices is not a reason to fill in every optional field you can invent a plausible value for).",
@@ -163,7 +174,9 @@ function buildSystemPrompt<T>(module: FormatModule<T>): string {
       "- If the request does not specify a count of invoices, generate exactly 1.",
       "- Output raw JSON only: no markdown fences, no commentary.",
     ].join("\n"),
-  ].join("\n\n");
+  ]
+    .filter((section): section is string => Boolean(section))
+    .join("\n\n");
 }
 
 async function runValidateRepairLoop<T>(

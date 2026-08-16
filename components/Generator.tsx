@@ -33,8 +33,14 @@ export default function Generator() {
   const busy = loading || fixupLoading;
 
   function handleSelectVariant(m: TreeModule) {
+    if (m.formatType === formatType && m.id === variantId) return;
+    abortRef.current?.abort();
     setFormatType(m.formatType);
     setVariantId(m.id);
+    setRecords(null);
+    setRenderedText("");
+    setError(null);
+    setFixupInstruction("");
   }
 
   function handleCancel() {
@@ -204,7 +210,7 @@ export default function Generator() {
                     </button>
                   </div>
                 </div>
-                <pre className="w-full overflow-x-auto px-5 py-4 text-xs font-mono leading-relaxed whitespace-pre text-ink">
+                <pre className="w-full max-h-96 overflow-auto px-5 py-4 text-xs font-mono leading-relaxed whitespace-pre text-ink">
                   {renderedText}
                 </pre>
               </section>

@@ -5,8 +5,8 @@ export default function AppSidebar({
   activeNav,
   children,
 }: {
-  activeNav: "generator" | "docs";
-  children: ReactNode;
+  activeNav: "generator" | "docs" | "rules";
+  children?: ReactNode;
 }) {
   const navItemClass = (active: boolean) =>
     `px-2.5 py-1.5 rounded-md text-sm ${
@@ -29,6 +29,9 @@ export default function AppSidebar({
         </Link>
         <Link href="/docs" className={navItemClass(activeNav === "docs")}>
           Format docs
+        </Link>
+        <Link href="/rules" className={navItemClass(activeNav === "rules")}>
+          Rules
         </Link>
       </nav>
 
