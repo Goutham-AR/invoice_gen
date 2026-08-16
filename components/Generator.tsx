@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { groupedClientRegistry, getClientModule } from "@/lib/formats/clientRegistry";
 import { consumeNdjson } from "@/lib/streamClient";
 import AppSidebar from "@/components/sidebar/AppSidebar";
@@ -25,12 +25,19 @@ export default function Generator() {
   const [copyLabel, setCopyLabel] = useState("Copy");
 
   const abortRef = useRef<AbortController | null>(null);
+  const outputRef = useRef<HTMLPreElement | null>(null);
 
   const currentGroup = groups.find((g) => g.formatType === formatType) ?? groups[0];
   const currentVariant = currentGroup.modules.find((m) => m.id === variantId) ?? currentGroup.modules[0];
   const currentModule = useMemo(() => getClientModule(formatType, variantId), [formatType, variantId]);
 
   const busy = loading || fixupLoading;
+
+  useEffect(() => {
+    const el = outputRef.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+  }, [renderedText]);
 
   function handleSelectVariant(m: TreeModule) {
     if (m.formatType === formatType && m.id === variantId) return;
@@ -210,7 +217,10 @@ export default function Generator() {
                     </button>
                   </div>
                 </div>
-                <pre className="w-full max-h-96 overflow-auto px-5 py-4 text-xs font-mono leading-relaxed whitespace-pre text-ink">
+                <pre
+                  ref={outputRef}
+                  className="w-full max-h-96 overflow-auto px-5 py-4 text-xs font-mono leading-relaxed whitespace-pre text-ink"
+                >
                   {renderedText}
                 </pre>
               </section>
