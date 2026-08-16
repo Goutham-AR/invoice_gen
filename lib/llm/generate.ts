@@ -137,11 +137,19 @@ export function createIncrementalItemParser() {
   };
 }
 
+function currentDateLine(): string {
+  const now = new Date();
+  const iso = now.toISOString().slice(0, 10);
+  const weekday = now.toLocaleDateString("en-US", { weekday: "long" });
+  return `Today's date is ${iso} (${weekday}). Use this as the reference point for any relative date the request implies (e.g. "due in 30 days", "last month's invoice", "dated yesterday") — do not default to a date from your training data.`;
+}
+
 function buildSystemPrompt<T>(module: FormatModule<T>): string {
   const jsonSchema = z.toJSONSchema(module.schema as unknown as z.ZodType);
 
   return [
     `You generate synthetic test invoice data used to exercise an invoice ingestion pipeline for the "${module.label}" format (${module.description}).`,
+    currentDateLine(),
     `Respond with ONLY a JSON object of the form {"invoices": [...]}, where "invoices" is a JSON array conforming to this JSON Schema:`,
     JSON.stringify(jsonSchema),
     `Format-specific business rules you must honor when deciding field values:`,

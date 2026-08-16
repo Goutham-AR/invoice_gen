@@ -5,7 +5,6 @@ import { groupedClientRegistry, getClientModule } from "@/lib/formats/clientRegi
 import { consumeNdjson } from "@/lib/streamClient";
 import AppSidebar from "@/components/sidebar/AppSidebar";
 import FormatTree, { type TreeModule } from "@/components/sidebar/FormatTree";
-import RecordEditor from "@/components/editor/RecordEditor";
 
 type ErrorResponse = { error: string };
 
@@ -97,12 +96,6 @@ export default function Generator() {
     const instruction = fixupInstruction;
     await runStream("/api/edit", { formatType, variantId, records, instruction }, setFixupLoading);
     setFixupInstruction((current) => (current === instruction ? "" : current));
-  }
-
-  function handleRecordsChange(next: unknown[]) {
-    if (!currentModule) return;
-    setRecords(next);
-    setRenderedText(currentModule.render(next));
   }
 
   function handleDownload() {
@@ -241,18 +234,6 @@ export default function Generator() {
                     </button>
                   )}
                 </div>
-              </section>
-
-              <section className="rounded-xl border border-hairline bg-surface p-5 space-y-3">
-                <h2 className="text-sm font-medium text-ink">Edit structured data</h2>
-                {currentModule && (
-                  <RecordEditor
-                    records={records}
-                    itemSchema={currentModule.itemSchema}
-                    fields={currentModule.fields}
-                    onChange={handleRecordsChange}
-                  />
-                )}
               </section>
             </>
           )}
