@@ -8,6 +8,46 @@ import FormatTree, { type TreeModule } from "@/components/sidebar/FormatTree";
 
 type ErrorResponse = { error: string };
 
+/** Parses comma-delimited text (honoring double-quoted fields) into rows of cells. */
+function parseCsv(text: string): string[][] {
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let field = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQuotes) {
+      if (ch === '"' && text[i + 1] === '"') {
+        field += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = false;
+      } else {
+        field += ch;
+      }
+      continue;
+    }
+    if (ch === '"') inQuotes = true;
+    else if (ch === ",") {
+      row.push(field);
+      field = "";
+    } else if (ch === "\n") {
+      row.push(field);
+      rows.push(row);
+      row = [];
+      field = "";
+    } else if (ch !== "\r") {
+      field += ch;
+    }
+  }
+  if (field !== "" || row.length > 0) {
+    row.push(field);
+    rows.push(row);
+  }
+  return rows;
+}
+
 const groups = groupedClientRegistry();
 
 const GROUP_LABELS: Record<string, string> = { csv: "CSV", edi: "EDI", quickbooks: "QuickBooks" };
@@ -25,7 +65,7 @@ export default function Generator() {
   const [copyLabel, setCopyLabel] = useState("Copy");
 
   const abortRef = useRef<AbortController | null>(null);
-  const outputRef = useRef<HTMLPreElement | null>(null);
+  const outputRef = useRef<HTMLElement | null>(null);
 
   const currentGroup = groups.find((g) => g.formatType === formatType) ?? groups[0];
   const currentVariant = currentGroup.modules.find((m) => m.id === variantId) ?? currentGroup.modules[0];
@@ -217,12 +257,44 @@ export default function Generator() {
                     </button>
                   </div>
                 </div>
-                <pre
-                  ref={outputRef}
-                  className="w-full max-h-96 overflow-auto px-5 py-4 text-xs font-mono leading-relaxed whitespace-pre text-ink"
-                >
-                  {renderedText}
-                </pre>
+                {formatType === "csv" ? (
+                  <div ref={(el) => { outputRef.current = el; }} className="w-full max-h-96 overflow-auto">
+                    <table className="w-full border-collapse text-xs font-mono">
+                      <tbody>
+                        {parseCsv(renderedText).map((cells, rowIndex) => (
+                          <tr
+                            key={rowIndex}
+                            className={
+                              rowIndex === 0
+                                ? "sticky top-0 bg-surface"
+                                : "border-t border-hairline"
+                            }
+                          >
+                            {cells.map((cell, cellIndex) => (
+                              <td
+                                key={cellIndex}
+                                className={
+                                  rowIndex === 0
+                                    ? "px-3 py-2 text-left font-medium text-ink whitespace-nowrap border-b border-hairline"
+                                    : "px-3 py-2 text-left text-ink whitespace-nowrap"
+                                }
+                              >
+                                {cell}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <pre
+                    ref={(el) => { outputRef.current = el; }}
+                    className="w-full max-h-96 overflow-auto px-5 py-4 text-xs font-mono leading-relaxed whitespace-pre text-ink"
+                  >
+                    {renderedText}
+                  </pre>
+                )}
               </section>
 
               <section className="rounded-xl border border-hairline bg-surface p-5 space-y-2">
