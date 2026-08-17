@@ -28,7 +28,7 @@ const COLUMNS = [
 ];
 
 function col(row: string, name: string): string {
-  return row.split("\t")[COLUMNS.indexOf(name)];
+  return row.split(",")[COLUMNS.indexOf(name)];
 }
 
 describe("renderCsv22", () => {

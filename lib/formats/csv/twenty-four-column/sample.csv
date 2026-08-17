@@ -1,8 +1,8 @@
-Division_id	Invoice_number	Invoice_date	Vendor_store_id	Invoice_due_date	Po_number	po_date	ref_invoice_number	quantity_shipped	Quantity_uom	Item_number	upc_pack	upc_case	gtin_id	product_description	unit_price	promotional_discount	State_tax	deposit_amount	miscellaneous_charge	extended_price	packs_per_case	County_tax	City_tax
-7385	INV_0402_CSV21	02/04/2026	1234567	02/20/2026	PO-0001	09/05/2024	RI-0001	2	CA	PDTN_0120-1			abcdef1234567g	Test	20					40	10		
-7385	INV_0402_CSV21	02/04/2026	1234567	02/20/2026	PO-0001	09/05/2024	RI-0001	3	CA	PDTN_0120-2			abcdef1234567g	Test	40		5			135	10		
-7385	INV_0402_CSV22	02/04/2026	1234567	02/20/2026	PO-0001	09/05/2024	RI-0001	2	CA	PDTN_0120-3			abcdef1234567g	Test	20			2		44	10		
-7385	INV_0402_CSV23	02/04/2026	1234567	02/20/2026	PO-0001	09/05/2024	RI-0001	3	CA	PDTN_0120-4			abcdef1234567g	Test	40			2	1	135	10	2	
-7385	INV_0402_CSV24	02/04/2026	1234567	02/20/2026	PO-0001	09/05/2024	RI-0001	3	CA	PDTN_0120-5			abcdef1234567g	Test	40		1			135	10	2	2
-7385	INV_0402_CSV25	02/04/2026	1234567	02/20/2026	PO-0001	09/05/2024	RI-0001	2	CA	PDTN_0120-6			abcdef1234567g	Test	23.55					47.1	10		
-7385	INV_0402_CSV25	02/04/2026	1234567	02/20/2026	PO-0001	09/05/2024	RI-0001	3	CA	PDTN_0120-7			abcdef1234567g	Test	35		2.15			111.45	10		
+Division_id,Invoice_number,Invoice_date,Vendor_store_id,Invoice_due_date,Po_number,po_date,ref_invoice_number,quantity_shipped,Quantity_uom,Item_number,upc_pack,upc_case,gtin_id,product_description,unit_price,promotional_discount,State_tax,deposit_amount,miscellaneous_charge,extended_price,packs_per_case,County_tax,City_tax
+7385,INV_0402_CSV21,02/04/2026,1234567,02/20/2026,PO-0001,09/05/2024,RI-0001,2,CA,PDTN_0120-1,,,abcdef1234567g,Test,20,,,,,40,10,,
+7385,INV_0402_CSV21,02/04/2026,1234567,02/20/2026,PO-0001,09/05/2024,RI-0001,3,CA,PDTN_0120-2,,,abcdef1234567g,Test,40,,5,,,135,10,,
+7385,INV_0402_CSV22,02/04/2026,1234567,02/20/2026,PO-0001,09/05/2024,RI-0001,2,CA,PDTN_0120-3,,,abcdef1234567g,Test,20,,,2,,44,10,,
+7385,INV_0402_CSV23,02/04/2026,1234567,02/20/2026,PO-0001,09/05/2024,RI-0001,3,CA,PDTN_0120-4,,,abcdef1234567g,Test,40,,,2,1,135,10,2,
+7385,INV_0402_CSV24,02/04/2026,1234567,02/20/2026,PO-0001,09/05/2024,RI-0001,3,CA,PDTN_0120-5,,,abcdef1234567g,Test,40,,1,,,135,10,2,2
+7385,INV_0402_CSV25,02/04/2026,1234567,02/20/2026,PO-0001,09/05/2024,RI-0001,2,CA,PDTN_0120-6,,,abcdef1234567g,Test,23.55,,,,,47.1,10,,
+7385,INV_0402_CSV25,02/04/2026,1234567,02/20/2026,PO-0001,09/05/2024,RI-0001,3,CA,PDTN_0120-7,,,abcdef1234567g,Test,35,,2.15,,,111.45,10,,

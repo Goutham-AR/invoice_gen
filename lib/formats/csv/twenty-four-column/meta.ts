@@ -5,6 +5,6 @@ export const meta: FormatMeta = {
   formatType: "csv",
   label: "24-Column CSV",
   description:
-    "Full tab-delimited invoice file: adds per-line county/city tax on top of the 22-column set.",
+    "Full comma-delimited invoice file: adds per-line county/city tax on top of the 22-column set.",
   fileExtension: ".csv",
 };

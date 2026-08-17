@@ -1,4 +1,4 @@
-import { renderTabDelimited, type CsvColumn } from "../shared";
+import { renderCsv, type CsvColumn } from "../shared";
 import type { Csv22Invoice, Csv22LineItem } from "./schema";
 
 function extendedPrice(li: Csv22LineItem): number {
@@ -31,5 +31,5 @@ const columns: CsvColumn<Csv22Invoice, Csv22LineItem>[] = [
 ];
 
 export function renderCsv22(invoices: Csv22Invoice[]): string {
-  return renderTabDelimited(columns, invoices, (inv) => inv.lineItems);
+  return renderCsv(columns, invoices, (inv) => inv.lineItems);
 }

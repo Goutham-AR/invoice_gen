@@ -2,7 +2,7 @@
 
 ## What this is
 
-The full CSV variant: everything in the 22-column format (tab-delimited mechanics, UPC/GTIN identifiers, promo/tax/deposit/misc. charges, calculated extended price — see that guide for all of it) plus two more per-line charge columns for local tax jurisdictions.
+The full CSV variant: everything in the 22-column format (comma-delimited mechanics, UPC/GTIN identifiers, promo/tax/deposit/misc. charges, calculated extended price — see that guide for all of it) plus two more per-line charge columns for local tax jurisdictions.
 
 ## What's new versus the 22-column variant
 

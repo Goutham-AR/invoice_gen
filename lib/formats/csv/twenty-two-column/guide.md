@@ -2,7 +2,7 @@
 
 ## What this is
 
-The same tab-delimited, one-row-per-line-item shape as the 12-column variant (see that guide for the file mechanics and the due-date fallback rule), extended with three things the minimal variant can't represent: **product identifiers** (UPC pack/case, GTIN), **per-line charges** (promotional discount, state tax, deposit, misc. charge), and a **reference invoice number** at the header level.
+The same comma-delimited, one-row-per-line-item shape as the 12-column variant (see that guide for the file mechanics and the due-date fallback rule), extended with three things the minimal variant can't represent: **product identifiers** (UPC pack/case, GTIN), **per-line charges** (promotional discount, state tax, deposit, misc. charge), and a **reference invoice number** at the header level.
 
 ## What's new versus the 12-column variant
 

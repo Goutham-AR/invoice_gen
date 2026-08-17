@@ -5,6 +5,6 @@ export const meta: FormatMeta = {
   formatType: "csv",
   label: "22-Column CSV",
   description:
-    "Tab-delimited invoice file with UPC/GTIN identifiers and per-line SAC-style charges (promo discount, state tax, deposit, misc.).",
+    "Comma-delimited invoice file with UPC/GTIN identifiers and per-line SAC-style charges (promo discount, state tax, deposit, misc.).",
   fileExtension: ".csv",
 };

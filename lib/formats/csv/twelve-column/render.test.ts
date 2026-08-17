@@ -19,9 +19,9 @@ describe("renderCsv12", () => {
     const [header, row] = output.split("\n");
 
     expect(header).toBe(
-      "Division_id\tinvoice_number\tinvoice_date\tVendor_store_id\tinvoice_due_date\tPo_number\tpo_date\tquantity_shipped\tQuantity_uom\titem_number\tproduct_description\tunit_price"
+      "Division_id,invoice_number,invoice_date,Vendor_store_id,invoice_due_date,Po_number,po_date,quantity_shipped,Quantity_uom,item_number,product_description,unit_price"
     );
-    expect(row).toBe("7385\tINV1\t02/04/2026\t1234567\t02/04/2026\tPO-1\t\t2\tCA\tITEM1\tWidget\t20");
+    expect(row).toBe("7385,INV1,02/04/2026,1234567,02/04/2026,PO-1,,2,CA,ITEM1,Widget,20");
   });
 
   it("passes through negative quantity/price as credit-return indicators unchanged", () => {
@@ -36,7 +36,7 @@ describe("renderCsv12", () => {
     };
 
     const [, row] = renderCsv12([invoice]).split("\n");
-    const cols = row.split("\t");
+    const cols = row.split(",");
     expect(cols[7]).toBe("-3");
   });
 

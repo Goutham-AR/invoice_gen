@@ -1,4 +1,4 @@
-import { renderTabDelimited, type CsvColumn } from "../shared";
+import { renderCsv, type CsvColumn } from "../shared";
 import type { Csv12Invoice, Csv12LineItem } from "./schema";
 
 const columns: CsvColumn<Csv12Invoice, Csv12LineItem>[] = [
@@ -17,5 +17,5 @@ const columns: CsvColumn<Csv12Invoice, Csv12LineItem>[] = [
 ];
 
 export function renderCsv12(invoices: Csv12Invoice[]): string {
-  return renderTabDelimited(columns, invoices, (inv) => inv.lineItems);
+  return renderCsv(columns, invoices, (inv) => inv.lineItems);
 }

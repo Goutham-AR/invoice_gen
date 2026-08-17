@@ -25,11 +25,11 @@ describe("renderCsv24", () => {
     };
 
     const [header, row] = renderCsv24([invoice]).split("\n");
-    const headerCols = header.split("\t");
+    const headerCols = header.split(",");
     expect(headerCols[headerCols.length - 2]).toBe("County_tax");
     expect(headerCols[headerCols.length - 1]).toBe("City_tax");
 
-    const rowCols = row.split("\t");
+    const rowCols = row.split(",");
     expect(rowCols[rowCols.length - 2]).toBe("2");
     expect(rowCols[rowCols.length - 1]).toBe("2");
 
@@ -49,7 +49,7 @@ describe("renderCsv24", () => {
     };
 
     const [header, row] = renderCsv24([invoice]).split("\n");
-    const extendedIdx = header.split("\t").indexOf("extended_price");
-    expect(row.split("\t")[extendedIdx]).toBe("120");
+    const extendedIdx = header.split(",").indexOf("extended_price");
+    expect(row.split(",")[extendedIdx]).toBe("120");
   });
 });

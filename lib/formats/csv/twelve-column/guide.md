@@ -2,7 +2,7 @@
 
 ## What this is
 
-Despite the name, this isn't comma-separated — it's a **tab-delimited flat file**. Every row is one line item, and the invoice-level fields (division, invoice number, date, customer, PO info) repeat on every row that belongs to that invoice. There's no separate "header block" and "detail block": the whole file is one table, with a single header row at the top (and even that header row is optional — files may arrive with or without it).
+This is a **comma-delimited flat file**. Every row is one line item, and the invoice-level fields (division, invoice number, date, customer, PO info) repeat on every row that belongs to that invoice. There's no separate "header block" and "detail block": the whole file is one table, with a single header row at the top (and even that header row is optional — files may arrive with or without it).
 
 This is the minimal of the three CSV variants: just enough to represent a shipment. It carries no UPC/GTIN identifiers, no per-line charges (tax, deposit, discount), and no extended price column — if your test scenario needs any of those, use the 22- or 24-column variant instead.
 
