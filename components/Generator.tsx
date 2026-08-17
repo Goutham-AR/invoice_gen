@@ -8,6 +8,13 @@ import FormatTree, { type TreeModule } from "@/components/sidebar/FormatTree";
 
 type ErrorResponse = { error: string };
 
+/** Strips symbols disallowed in generated file names (the extension's own leading "." is exempt — it's applied separately). */
+const FORBIDDEN_FILENAME_CHARS = /[~`!@#$%^&*()+={}[\]|\\;:"'<>,.\/?¿]/g;
+
+function sanitizeFileNameBase(base: string): string {
+  return base.replace(FORBIDDEN_FILENAME_CHARS, "");
+}
+
 /** Parses comma-delimited text (honoring double-quoted fields) into rows of cells. */
 function parseCsv(text: string): string[][] {
   const rows: string[][] = [];
@@ -157,7 +164,7 @@ export default function Generator() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${variantId}${currentModule.fileExtension}`;
+    a.download = `${sanitizeFileNameBase(variantId)}${currentModule.fileExtension}`;
     a.click();
     URL.revokeObjectURL(url);
   }
